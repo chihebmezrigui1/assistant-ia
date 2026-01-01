@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+  backend:
+    build: .
+    container_name: assistant_backend
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - ./db:/app/db
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  streamlit:
+    build: .
+    container_name: assistant_streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      backend:
+        condition: service_healthy
+    command: streamlit run streamlit_app/app.py --server.port=8501 --server.address=0.0.0.0
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: assistant_n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - N8N_SECURE_COOKIE=false
+      - EXECUTIONS_MODE=regular
+      - QUEUE_HEALTH_CHECK_ACTIVE=false
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+      - ./data:/data
+    depends_on:
+      - backend
+    restart: unless-stopped

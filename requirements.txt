@@ -1,0 +1,28 @@
+# --- Frameworks ---
+fastapi==0.109.0
+uvicorn[standard]
+pydantic>=2.7.4
+streamlit
+requests
+python-multipart
+python-dotenv
+
+# --- LangChain Core ---
+langchain==0.3.1
+langchain-community==0.3.1
+langchain-huggingface>=0.1.0
+langchain-mistralai>=0.2.0
+
+# --- Vector Store & PDF ---
+chromadb==0.4.22
+pypdf
+pdfplumber
+
+# --- IA Embeddings (Optimisé CPU pour Docker) ---
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio
+sentence-transformers
+transformers
+huggingface-hub
