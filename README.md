@@ -17,7 +17,7 @@ Une application d'assistant intelligent contextuel basée sur **RAG (Retrieval-A
 9. [Intégration n8n](#intégration-n8n)
 10. [Bonnes pratiques](#bonnes-pratiques)
 11. [Extensions possibles](#extensions-possibles)
-12. [Auteur](#auteur)
+
 
 ---
 
